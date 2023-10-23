@@ -1,0 +1,27 @@
+<launch>
+
+
+
+    <arg name="rviz_config_file" default="$(find scanner_robot)/config/basic_laser.rviz"/>
+
+
+
+
+    <arg name="use_sim_time" default="true"/>
+    <arg name="ros_bag_location" default=""/>
+
+    <include file="$(find scanner_robot)/launch/versetile_launch.launch"/>
+
+    <arg name="topics" default="/tf_trajectory:=/tf" />
+    <node if="$(arg use_sim_time)" name="play_bag" pkg="rosbag" type="play" args="--clock $(arg ros_bag_location) $(arg topics)"/>
+    <node unless="$(arg use_sim_time)" name="play_bag" pkg="rosbag" type="play" args="$(arg ros_bag_location) $(arg topics)"/>
+
+
+
+
+    <node pkg="rviz" type="rviz" name="rviz" args="-d $(arg rviz_config_file)" required="true"/>
+
+
+
+
+</launch>

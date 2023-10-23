@@ -1,0 +1,19 @@
+<launch>
+
+   <arg name="permanent_map" default="false"/>
+  
+   <arg if="$(arg permanent_map)" name="rviz_config_file" default="$(find scanner_robot)/config/mapping.rviz"/>
+   <arg unless="$(arg permanent_map)" name="rviz_config_file" default="$(find scanner_robot)/config/map_scanner.rviz"/>
+
+   <arg name="ros_bag_location" default=""/>
+
+   <include file="$(find scanner_robot)/launch/versetile_launch.launch"/>
+
+   <arg name="topics" default="/tf_trajectory:=/tf" />
+   <node name="play_bag" pkg="rosbag" type="play" args="$(arg ros_bag_location) $(arg topics)"/>
+
+   <node pkg="rviz" type="rviz" name="rviz" args="-d $(arg rviz_config_file)" required="true"/>
+
+    <node pkg="map_server" type="map_server" name="map_server_node" args="$(find maps_glennan)/maps/glennan5_map.yaml"/>
+
+</launch>
